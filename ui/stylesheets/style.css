@@ -1,22 +1,79 @@
+/*** The Essential Code ***/
+
 body {
+	min-width: 550px;         /* 2 x LC width + RC width */
+}
+
+#container {
+	padding-left: 200px;      /* LC width */
+	
+}
+
+#container .column {
+	position: relative;
+	float: left;
+}
+
+#center {
 	width: 100%;
 }
 
-#header {
+#left {
+	width: 200px;             /* LC width */
+	right: 200px;             /* LC width */
+	margin-left: -100%;
+}
+
+
+
+#footer {
+	clear: both;
+}
+
+/*** IE6 Fix ***/
+* html #left {
+	left: 150px;              /* RC width */
+}
+
+/*** Just for Looks ***/
+
+body {
+	margin: 0;
+	padding: 0;
+	background: #FFF;
+}
+
+#header, #footer {
+	background: #999;
+}
+
+#left {
 	background: #fff;
-	width: 150px;
-	float: left;
+}
+
+#center {
+	background: #DDD;
+}
+
+#container .column {
 }
 
 .logo {
 	background: url("../images/daisypi_logo.jpg") no-repeat;
-	width: 153px;
-	height: 211px;
+	width: 103px;
+	height: 147px;
 	margin: auto;
-	margin-top: 100px;
+	margin-top: 30px;
 }
 
 #tabs {
-	width: 80%;
+	width: 40%;
 	float: left;
+}
+
+#graphs{
+	float: left;
+	width: 55%;
+	color: blue;
+
 }
