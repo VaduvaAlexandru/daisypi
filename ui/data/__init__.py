@@ -1,7 +1,5 @@
 '''Model the entities.'''
 
-import flask
+import flask.ext.sqlalchemy
 
-import daisy
-
-DB = flask.ext.sqlalchemy.SQLAlchemy(daisy.app)
+DB = flask.ext.sqlalchemy.SQLAlchemy()
