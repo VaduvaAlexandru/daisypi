@@ -2,6 +2,8 @@ import os
 import flask
 
 from data.update import update_json
+from data import DB
+
 
 DEBUG = os.environ.get('DEBUG') == 'on'
 PORT = int(os.environ.get('PORT', '5000'))
@@ -9,6 +11,9 @@ PORT = int(os.environ.get('PORT', '5000'))
 
 app = flask.Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = os.environ['DATABASE_URL']
+DB.init_app(app)
+with app.app_context():
+    DB.create_all()
 
 
 @app.route('/')
