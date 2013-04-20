@@ -6,7 +6,7 @@ class TemperatureReading(DB.Model):
     '''Model a temperature reading.'''
     id = DB.Column(DB.Integer, primary_key=True)
     value = DB.Column(DB.Float)
-    date = DB.DateTime()
+    date = DB.Column(DB.DateTime())
 
     def __init__(self, value, date):
         self.value = value
@@ -20,7 +20,7 @@ class DewPointReading(DB.Model):
     '''Model a dew point reading.'''
     id = DB.Column(DB.Integer, primary_key=True)
     value = DB.Column(DB.Float)
-    date = DB.DateTime()
+    date = DB.Column(DB.DateTime())
 
     def __init__(self, value, date):
         self.value = value
@@ -34,7 +34,7 @@ class CoReading(DB.Model):
     '''Model a co reading.'''
     id = DB.Column(DB.Integer, primary_key=True)
     value = DB.Column(DB.Integer)
-    date = DB.DateTime()
+    date = DB.Column(DB.DateTime())
 
     def __init__(self, value, date):
         self.value = value
@@ -48,7 +48,7 @@ class PressureReading(DB.Model):
     '''Model a pressure reading.'''
     id = DB.Column(DB.Integer, primary_key=True)
     value = DB.Column(DB.Integer)
-    date = DB.DateTime()
+    date = DB.Column(DB.DateTime())
 
     def __init__(self, value, date):
         self.value = value
@@ -62,7 +62,7 @@ class HumidityReading(DB.Model):
     '''Model a humidity reading.'''
     id = DB.Column(DB.Integer, primary_key=True)
     value = DB.Column(DB.Integer)
-    date = DB.DateTime()
+    date = DB.Column(DB.DateTime())
 
     def __init__(self, value, date):
         self.value = value
@@ -76,7 +76,7 @@ class MicReading(DB.Model):
     '''Model a mic reading.'''
     id = DB.Column(DB.Integer, primary_key=True)
     value = DB.Column(DB.Integer)
-    date = DB.DateTime()
+    date = DB.Column(DB.DateTime())
 
     def __init__(self, value, date):
         self.value = value
@@ -90,7 +90,7 @@ class PressureDiffReading(DB.Model):
     '''Model a pressure diff reading.'''
     id = DB.Column(DB.Integer, primary_key=True)
     value = DB.Column(DB.Integer)
-    date = DB.DateTime()
+    date = DB.Column(DB.DateTime())
 
     def __init__(self, value, date):
         self.value = value
@@ -104,7 +104,7 @@ class LightReading(DB.Model):
     '''Model a light reading.'''
     id = DB.Column(DB.Integer, primary_key=True)
     value = DB.Column(DB.Integer)
-    date = DB.DateTime()
+    date = DB.Column(DB.DateTime())
 
     def __init__(self, value, date):
         self.value = value
@@ -118,7 +118,7 @@ class WebcamStatus(DB.Model):
     '''Model a webcam status message.'''
     id = DB.Column(DB.Integer, primary_key=True)
     value = DB.Column(DB.String(50))
-    date = DB.DateTime()
+    date = DB.Column(DB.DateTime())
 
     def __init__(self, value, date):
         self.value = value
@@ -132,7 +132,7 @@ class StatusMessage(DB.Model):
     '''Model a DaisyPi status message.'''
     id = DB.Column(DB.Integer, primary_key=True)
     value = DB.Column(DB.String(200))
-    date = DB.DateTime()
+    date = DB.Column(DB.DateTime())
 
     def __init__(self, value, date):
         self.value = value
@@ -141,6 +141,13 @@ class StatusMessage(DB.Model):
     def __repr__(self):
         return '<DaisyPi status message %r>' % self.value
 
+
+# class ProfileMessage(DB.Model):
+#     '''Model a notification triggered by one of the profiles.'''
+#     id = DB.Column(DB.Integer, primary_key=True)
+#     value = DB.Column(DB.String(200))
+#     ack = DB.Column
+#     date = DB.DateTime()
 
 # class DaisyReading(DB.Model):
 #     '''Model a temperature reading.'''
