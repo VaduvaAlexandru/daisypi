@@ -142,12 +142,21 @@ class StatusMessage(DB.Model):
         return '<DaisyPi status message %r>' % self.value
 
 
-# class ProfileMessage(DB.Model):
-#     '''Model a notification triggered by one of the profiles.'''
-#     id = DB.Column(DB.Integer, primary_key=True)
-#     value = DB.Column(DB.String(200))
-#     ack = DB.Column
-#     date = DB.DateTime()
+class ProfileMessage(DB.Model):
+    '''Model a notification triggered by one of the profiles.'''
+    id = DB.Column(DB.Integer, primary_key=True)
+    value = DB.Column(DB.String(200))
+    ack = DB.Column
+    date = DB.Column(DB.DateTime())
+
+    def __init__(self, value, date, ack=False):
+        self.value = value
+        self.date = date
+        self.ack = ack
+
+    def __repr__(self):
+        return '<Notification message %r>' % self.value
+
 
 # class DaisyReading(DB.Model):
 #     '''Model a temperature reading.'''
