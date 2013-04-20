@@ -21,3 +21,11 @@ Enable Webcam:
 	$ make
 	$ ./mjpg_streamer -i "./input_uvc.so -n -f 15 -r 1280x960" -o "./output_http.so -n -w ./www"
 
+Enable SPI Driver functionality:
+	Install wiringPi and test it with: "gpio -v".
+	Write SPI driver for ADC temperature read.
+	
+
+						Info
+				
+	Found a bug: when inserting a USB Hub the USB rebooted.
