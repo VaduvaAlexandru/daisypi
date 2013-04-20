@@ -1,0 +1,22 @@
+body {
+	width: 100%;
+}
+
+#header {
+	background: #fff;
+	width: 150px;
+	float: left;
+}
+
+.logo {
+	background: url("../images/daisypi_logo.jpg") no-repeat;
+	width: 153px;
+	height: 211px;
+	margin: auto;
+	margin-top: 100px;
+}
+
+#tabs {
+	width: 80%;
+	float: left;
+}
