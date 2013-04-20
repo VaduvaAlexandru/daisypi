@@ -1,7 +1,7 @@
 import os
 import flask
 
-from data.update import update_json
+import data.update
 from data import DB
 
 
@@ -23,7 +23,8 @@ def hello_world():
 
 @app.route('/update', methods=['POST'])
 def update():
-    update_json(flask.request.json)
+    data.update.update_json(flask.request.json)
+    data.update.test_upload()
     return str(flask.request.json)
 
 

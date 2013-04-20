@@ -2,6 +2,7 @@ import datetime
 
 from . import DB
 import entities
+import profiles
 
 
 def update_json(new_json):
@@ -27,14 +28,29 @@ def update_json(new_json):
                                                     now))
     if 'light' in new_json:
         DB.session.add(entities.LightReading(new_json['light'], now))
+    if 'pir' in new_json:
+        DB.session.add(entities.PirReading(new_json['pir'], now))
     if 'webcam_status' in new_json:
         DB.session.add(entities.WebcamStatus(new_json['webcam_status'], now))
     if 'status_message' in new_json:
         DB.session.add(entities.StatusMessage(new_json['status_message'], now))
-
     DB.session.commit()
+    profiles.check_conditions_of_profiles(new_json)
 
 
 def test_upload():
     '''print the last entry from each db'''
-    pass
+    for entity in [entities.TemperatureReading,
+                   entities.DewPointReading,
+                   entities.CoReading,
+                   entities.PressureReading,
+                   entities.HumidityReading,
+                   entities.MicReading,
+                   entities.PressureDiffReading,
+                   entities.LightReading,
+                   entities.PirReading,
+                   entities.WebcamStatus,
+                   entities.StatusMessage,
+                   entities.ProfileMessage]:
+        last_entry = entity.query.all()[-1]
+        print('Last {0} entry: {1}'.format(last_entry, last_entry.value))
