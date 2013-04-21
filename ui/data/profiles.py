@@ -12,6 +12,7 @@ baby_monitoring_profile = {'key': 'baby_monitoring',
                            'co': [0, 450],
                            'humidity': [40, 60]}
 
+# For the thermostat we will use a marking system
 thermostat_profile = {'key': 'thermostat',
                       'temperature': [],   # [19, 26],
                       'dew_point': [],   # [10, 18],
@@ -22,6 +23,7 @@ thermostat_profile = {'key': 'thermostat',
 home_surveilance_profile = {'pressure_diff': [0, 50],
                             'pir': [0, 0]}
 
+# No thredsholds for home sniffing, observe everything
 home_sniffer_profile = {}
 
 

@@ -115,7 +115,7 @@ class LightReading(DB.Model):
 
 
 class PirReading(DB.Model):
-    '''Model a pir reading.'''
+    '''Model a pir (motion detection) reading.'''
     id = DB.Column(DB.Integer, primary_key=True)
     value = DB.Column(DB.Integer)
     date = DB.Column(DB.DateTime)
@@ -172,4 +172,3 @@ class ProfileMessage(DB.Model):
 
     def __repr__(self):
         return '<Notification message %r>' % self.profile
-

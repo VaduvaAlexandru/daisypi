@@ -35,6 +35,7 @@ def update_json(new_json):
     if 'status_message' in new_json:
         DB.session.add(entities.StatusMessage(new_json['status_message'], now))
     DB.session.commit()
+    # Check if the new readings trigger any notifications
     profiles.check_conditions_of_profiles(new_json)
 
 
