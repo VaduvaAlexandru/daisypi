@@ -1,8 +1,3 @@
-	Exemplul nostru urma sa fie folosit pentru filtrarea rezultatelor in urma masuratorilor efecuate 
-asupra senzorului de presiune barometrica, insa am amanat includerea sa in implementarea finala deoarece 
-taierea spike-urilor ar duce la taierea nedorita a unor variatii rapide de presiune care ar putea sa fie 
-utile utilizatorului in cazul in care ele continua sa ramana oscilante.  
-
 /* 
 A simple kalman filter example by Adrian Boeing
 www.adrianboeing.com
