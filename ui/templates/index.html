@@ -30,22 +30,8 @@
 	pane.jScrollPane(settings);
 	var api = pane.data('jsp');
 	var i = 1;
-
-	// Every second add some new content...
-	setInterval(
-		function()
-		{if (i< 20){
-			api.getContentPane().append(
-				$('<p />').text('This is paragraph number ' + i++)
-			);
-			// we could call "pane.jScrollPane(settings)" again but it is
-			// more convenient to call via the API as then the original
-			// settings we passed in are automatically remembered.
-			api.reinitialise();
-			}
-		},
-		1000
-	);
+//api.reinitialise();
+	
 });
 		
     </script>
@@ -162,8 +148,18 @@ $( "#tabs" ).tabs();
 		</div>
 		
 		<div id="graphs">
-
-		
+		<div class="graph">
+			<img src="https://api.cosm.com/v2/feeds/125842/datastreams/baro.png?width=600&height=200&colour=%23f15a24&duration=1day&title=Baro&show_axis_labels=true&detailed_grid=true&scale=datastream"/>
+		</div>
+		<div class="graph">
+			<img src="https://api.cosm.com/v2/feeds/125842/datastreams/baro.png?width=600&height=200&colour=%23f15a24&duration=1day&title=Baro&show_axis_labels=true&detailed_grid=true&scale=datastream"/>
+		</div>
+		<div class="graph">
+			<img src="https://api.cosm.com/v2/feeds/125842/datastreams/baro.png?width=600&height=200&colour=%23f15a24&duration=1day&title=Baro&show_axis_labels=true&detailed_grid=true&scale=datastream"/>
+		</div>
+		<div class="graph">
+			<img src="https://api.cosm.com/v2/feeds/125842/datastreams/baro.png?width=600&height=200&colour=%23f15a24&duration=1day&title=Baro&show_axis_labels=true&detailed_grid=true&scale=datastream"/>
+		</div>
 		</div>
 	</div>
 
