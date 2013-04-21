@@ -7,41 +7,25 @@
 <link rel="stylesheet" href="../static/stylesheets/style.css" />
 <script src="../static/js/jquery-1.9.1.js"></script>
 <script src="../static/js/jquery-ui.js"></script>
-<!-- styles needed by jScrollPane -->
-<link type="text/css" href="../static/stylesheets/jquery.jscrollpane.css" rel="stylesheet" media="all" />
 
-<!-- the mousewheel plugin - optional to provide mousewheel support -->
-<script type="text/javascript" src="../static/js/jquery.mousewheel.js"></script>
-
-<!-- the jScrollPane script -->
-<script type="text/javascript" src="../static/js/jquery.jscrollpane.min.js"></script>
-
-
-<script id="sourcecode" type="text/javascript">
-
-
-
-			$(function()
-{
-	var settings = {
-		showArrows: false
-	};
-	var pane = $('.scroll-pane')
-	pane.jScrollPane(settings);
-	var api = pane.data('jsp');
-	var i = 1;
-	// api.reinitialise();
-});
-    </script>
-
-
-
-
-<script>
+<script type="text/javascript">
 $(function() {
 $( "#tabs" ).tabs();
+
+setInterval(function(){
+
+	$.get('/stuff', function(data){
+		$('#tabs-1 .scroll-pane').html(data);
+		// $('#tabs-1 .scroll-pane').data('jsp').reinitialise();
+	// var pane = $('.scroll-pane')
+	// pane.jScrollPane(settings);
+	// var api = pane.data('jsp');
+	});
+
+}, 1000);
 });
 </script>
+
 </head>
 <body>
 
@@ -56,10 +40,8 @@ $( "#tabs" ).tabs();
 		<ul>
 		<li class="baby-monitor">
 			<a href="#tabs-1">
-			<div class="caca">
 				<img class="tab-icon" src="../static/images/baby-monitor_icon.png"></img>
 				<div class="tab-text">Baby<br/>monitor</div>
-			</div>
 			</a>
 		</li>
 		<li class="thermostat">
@@ -90,60 +72,57 @@ $( "#tabs" ).tabs();
 		<div id="tabs-1" class="baby-monitor">
 		<div class="content">
 			<h1>Baby monitor</h1>
-			<div class="scroll-pane">
-				{% for message in baby_messages %}
-				<div class="msg">
-					<div class="msg-time">{{message.date.strftime('[%a, %d %b %Y %H:%M:%S]')}}</div>
-					<div class="msg-text">{{message.value}}</div>
-				</div>
-				{% endfor %}
-			</div>
+ 				{% include 'baby_template.html' with context %}
 		</div>
 		</div>
 		<div id="tabs-2" class="thermostat">
 		<div class="content">
 			<h1>Thermostat</h1>
-			<div class="scroll-pane">
 			<p>Morbi tincidunt, dui sit amet facilisis feugiat, odio metus gravida ante, ut pharetra massa metus id nunc. Duis scelerisque molestie turpis. Sed fringilla, massa eget luctus malesuada, metus eros molestie lectus, ut tempus eros massa ut dolor. Aenean aliquet fringilla sem. Suspendisse sed ligula in ligula suscipit aliquam. Praesent in eros vestibulum mi adipiscing adipiscing. Morbi facilisis. Curabitur ornare consequat nunc. Aenean vel metus. Ut posuere viverra nulla. Aliquam erat volutpat. Pellentesque convallis. Maecenas feugiat, tellus pellentesque pretium posuere, felis lorem euismod felis, eu ornare leo nisi vel felis. Mauris consectetur tortor et purus.</p>
-			</div>
 		</div>
 		</div>
 		<div id="tabs-3" class="home-surveillance">
 		<div class="content">
 			<h1>Home surveillance</h1>
-			<div class="scroll-pane">
-			<p>Mauris eleifend est et turpis. Duis id erat. Suspendisse potenti. Aliquam vulputate, pede vel vehicula accumsan, mi neque rutrum erat, eu congue orci lorem eget lorem. Vestibulum non ante. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Fusce sodales. Quisque eu urna vel enim commodo pellentesque. Praesent eu risus hendrerit ligula tempus pretium. Curabitur lorem enim, pretium nec, feugiat nec, luctus a, lacus.</p>
-			<p>Duis cursus. Maecenas ligula eros, blandit nec, pharetra at, semper at, magna. Nullam ac lacus. Nulla facilisi. Praesent viverra justo vitae neque. Praesent blandit adipiscing velit. Suspendisse potenti. Donec mattis, pede vel pharetra blandit, magna ligula faucibus eros, id euismod lacus dolor eget odio. Nam scelerisque. Donec non libero sed nulla mattis commodo. Ut sagittis. Donec nisi lectus, feugiat porttitor, tempor ac, tempor vitae, pede. Aenean vehicula velit eu tellus interdum rutrum. Maecenas commodo. Pellentesque nec elit. Fusce in lacus. Vivamus a libero vitae lectus hendrerit hendrerit.</p>
-			<p>Duis cursus. Maecenas ligula eros, blandit nec, pharetra at, semper at, magna. Nullam ac lacus. Nulla facilisi. Praesent viverra justo vitae neque. Praesent blandit adipiscing velit. Suspendisse potenti. Donec mattis, pede vel pharetra blandit, magna ligula faucibus eros, id euismod lacus dolor eget odio. Nam scelerisque. Donec non libero sed nulla mattis commodo. Ut sagittis. Donec nisi lectus, feugiat porttitor, tempor ac, tempor vitae, pede. Aenean vehicula velit eu tellus interdum rutrum. Maecenas commodo. Pellentesque nec elit. Fusce in lacus. Vivamus a libero vitae lectus hendrerit hendrerit.</p>
+			<p>Live streaming</p>
+				<div class="camera">
+			<img alt="" src="http://192.168.1.102:8080/?action=stream" width="401" height="320" />
 			</div>
 		</div>
 		</div>
 		<div id="tabs-4" class="location-sniffer">
 		<div class="content">
 			<h1>Location sniffer</h1>
-			<div class="scroll-pane">
-			<p>Mauris eleifend est et turpis. Duis id erat. Suspendisse potenti. Aliquam vulputate, pede vel vehicula accumsan, mi neque rutrum erat, eu congue orci lorem eget lorem. Vestibulum non ante. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Fusce sodales. Quisque eu urna vel enim commodo pellentesque. Praesent eu risus hendrerit ligula tempus pretium. Curabitur lorem enim, pretium nec, feugiat nec, luctus a, lacus.</p>
-			<p>Duis cursus. Maecenas ligula eros, blandit nec, pharetra at, semper at, magna. Nullam ac lacus. Nulla facilisi. Praesent viverra justo vitae neque. Praesent blandit adipiscing velit. Suspendisse potenti. Donec mattis, pede vel pharetra blandit, magna ligula faucibus eros, id euismod lacus dolor eget odio. Nam scelerisque. Donec non libero sed nulla mattis commodo. Ut sagittis. Donec nisi lectus, feugiat porttitor, tempor ac, tempor vitae, pede. Aenean vehicula velit eu tellus interdum rutrum. Maecenas commodo. Pellentesque nec elit. Fusce in lacus. Vivamus a libero vitae lectus hendrerit hendrerit.</p>
-			</div>
+			<p>Please see the graphs on the right hand side for sensor readings.</p>
 		</div>
 		</div>
 		<div id="tabs-5" class="all">
 		<div class="content">
 			<h1>All</h1>
-			<div class="scroll-pane">
 				{% for message in all_messages %}
 				<div class="msg">
 					<div class="msg-time">{{message.date.strftime('[%a, %d %b %Y %H:%M:%S]')}}</div>
 					<div class="msg-text">{{message.value}}</div>
 				</div>
 				{% endfor %}
-			</div>
 		</div>
 		</div>
 		</div>
 
 		<div id="graphs">
 
+		<div class="graph">
+			<img src="https://api.cosm.com/v2/feeds/125842/datastreams/baro.png?width=600&height=200&colour=%23f15a24&duration=1day&title=Baro&show_axis_labels=true&detailed_grid=true&scale=datastream"/>
+		</div>
+		<div class="graph">
+			<img src="https://api.cosm.com/v2/feeds/125842/datastreams/baro.png?width=600&height=200&colour=%23f15a24&duration=1day&title=Baro&show_axis_labels=true&detailed_grid=true&scale=datastream"/>
+		</div>
+		<div class="graph">
+			<img src="https://api.cosm.com/v2/feeds/125842/datastreams/baro.png?width=600&height=200&colour=%23f15a24&duration=1day&title=Baro&show_axis_labels=true&detailed_grid=true&scale=datastream"/>
+		</div>
+		<div class="graph">
+			<img src="https://api.cosm.com/v2/feeds/125842/datastreams/baro.png?width=600&height=200&colour=%23f15a24&duration=1day&title=Baro&show_axis_labels=true&detailed_grid=true&scale=datastream"/>
+		</div>
 
 		</div>
 	</div>

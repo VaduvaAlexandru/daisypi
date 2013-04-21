@@ -25,6 +25,12 @@ def hello_world():
     })
 
 
+@app.route('/stuff')
+def baby_stuff():
+    return flask.render_template('baby_template.html', **{
+       'baby_messages': data.entities.ProfileMessage.query.filter_by(profile='baby_monitoring'),})
+
+
 @app.route('/update', methods=['POST'])
 def update():
     data.update.update_json(flask.request.json)

@@ -1,0 +1,6 @@
+{% for message in baby_messages %}
+<div class="msg">
+    <div class="msg-time">{{message.date.strftime('[%a, %d %b %Y %H:%M:%S]')}}</div>
+    <div class="msg-text">{{message.value}}</div>
+</div>
+{% endfor %}
