@@ -171,5 +171,5 @@ class ProfileMessage(DB.Model):
         self.ack = ack
 
     def __repr__(self):
-        return '<Notification message %r>' % self.value
+        return '<Notification message %r>' % self.profile
 
