@@ -16,32 +16,24 @@
 <!-- the jScrollPane script -->
 <script type="text/javascript" src="../static/js/jquery.jscrollpane.min.js"></script>
 
-
-<script id="sourcecode" type="text/javascript">
-
-
-
-			$(function()
-{
-	var settings = {
-		showArrows: false
-	};
-	var pane = $('.scroll-pane')
-	pane.jScrollPane(settings);
-	var api = pane.data('jsp');
-	var i = 1;
-	// api.reinitialise();
-});
-    </script>
-
-
-
-
 <script>
 $(function() {
 $( "#tabs" ).tabs();
+
+setInterval(function(){
+
+	$.get('/stuff', function(data){
+		$('#tabs-1 .scroll-pane').html(data);
+		// $('#tabs-1 .scroll-pane').data('jsp').reinitialise();
+	// var pane = $('.scroll-pane')
+	// pane.jScrollPane(settings);
+	// var api = pane.data('jsp');
+	});
+
+}, 1000);
 });
 </script>
+
 </head>
 <body>
 
@@ -56,10 +48,8 @@ $( "#tabs" ).tabs();
 		<ul>
 		<li class="baby-monitor">
 			<a href="#tabs-1">
-			<div class="caca">
 				<img class="tab-icon" src="../static/images/baby-monitor_icon.png"></img>
 				<div class="tab-text">Baby<br/>monitor</div>
-			</div>
 			</a>
 		</li>
 		<li class="thermostat">
@@ -91,12 +81,7 @@ $( "#tabs" ).tabs();
 		<div class="content">
 			<h1>Baby monitor</h1>
 			<div class="scroll-pane">
-				{% for message in baby_messages %}
-				<div class="msg">
-					<div class="msg-time">{{message.date.strftime('[%a, %d %b %Y %H:%M:%S]')}}</div>
-					<div class="msg-text">{{message.value}}</div>
-				</div>
-				{% endfor %}
+ 				{% include 'baby_template.html' with context %}
 			</div>
 		</div>
 		</div>
