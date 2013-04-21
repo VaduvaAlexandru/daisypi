@@ -19,16 +19,29 @@ with app.app_context():
 
 @app.route('/')
 def hello_world():
-    return flask.render_template('index.html', **{
-       'baby_messages': data.entities.ProfileMessage.query.filter_by(profile='baby_monitoring'),
-       'all_messages': data.entities.ProfileMessage.query.all(),
-    })
+    return flask.render_template('index.html')
+        # **{
+       # 'baby_messages': data.entities.ProfileMessage.query.filter_by(profile='baby_monitoring'),
+       # 'all_messages': data.entities.ProfileMessage.query.all(),
+    # )
 
 
 @app.route('/stuff')
 def baby_stuff():
     return flask.render_template('baby_template.html', **{
        'baby_messages': data.entities.ProfileMessage.query.filter_by(profile='baby_monitoring'),})
+
+
+@app.route('/stuff2')
+def thermo_stuff():
+    return flask.render_template('thermo_template.html', **{
+       'thermo_messages': data.entities.ProfileMessage.query.filter_by(profile='thermostat'),})
+
+
+@app.route('/stuff3')
+def thermo_stuff():
+    return flask.render_template('all_template.html', **{
+        'all_messages': data.entities.ProfileMessage.query.all(),})
 
 
 @app.route('/update', methods=['POST'])
