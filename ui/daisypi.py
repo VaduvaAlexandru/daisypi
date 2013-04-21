@@ -2,6 +2,7 @@ import os
 import flask
 
 import data.update
+import data.entities
 from data import DB
 
 
@@ -18,7 +19,10 @@ with app.app_context():
 
 @app.route('/')
 def hello_world():
-    return flask.render_template('index.html')
+    return flask.render_template('index.html', **{
+       'baby_messages': data.entities.ProfileMessage.query.filter_by(profile='baby_monitoring'),
+       'all_messages': data.entities.ProfileMessage.query.all(),
+    })
 
 
 @app.route('/update', methods=['POST'])
