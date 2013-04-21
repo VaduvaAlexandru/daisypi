@@ -42,7 +42,7 @@ def check_conditions_of_profiles(new_json):
 def check_baby_monitoring(new_json):
     '''Based on a new update, check conditions of
     the baby monitoring profile.'''
-	new_message = False
+    new_message = False
     if 'mic' in new_json:
         if new_json['mic'] > baby_monitoring_profile['mic'][1]:
             message = ('The baby might be up! The mic level is over {0}'
@@ -109,7 +109,7 @@ def check_thermostat(new_json):
             old_pressure = pressure[-240].value
         else:
             old_pressure = None
-    
+
     mark_temp = 10 - (2.5 * abs(last_temp - 23))
     mark_dew_point = 10 - (2.5 * abs(last_dew_point - 14))
     mark_co = 10 - (0.025 * abs(last_co - 400))
@@ -120,39 +120,35 @@ def check_thermostat(new_json):
     new_message = False
     if mark_temp < 0:
         message = ('The temperature is unpleasent! {0}C'
-                    ''.format(last_temp))
-		DB.session.add(entities.ProfileMessage(message,
-					   thermostat_profile['key'],
-					   datetime.datetime.now()))
-		new_message = True
+                   ''.format(last_temp))
+        DB.session.add(entities.ProfileMessage(message,
+                       thermostat_profile['key'],
+                       datetime.datetime.now()))
+    new_message = True
     if mark_dew_point < 0:
         message = ('The dew point is unpleasent! {0}'
-                    ''.format(last_dew_point))
-		DB.session.add(entities.ProfileMessage(message,
-					   thermostat_profile['key'],
-					   datetime.datetime.now()))
-	    new_message = True
+                   ''.format(last_dew_point))
+        DB.session.add(entities.ProfileMessage(message,
+                       thermostat_profile['key'],
+                       datetime.datetime.now()))
+    new_message = True
     if mark_co < 0:
         message = ('The CO is unpleasent! {0}'
-                    ''.format(last_co))
-		DB.session.add(entities.ProfileMessage(message,
-					   thermostat_profile['key'],
-					   datetime.datetime.now()))
-	    new_message = True
-	if mark_pressure < 0:
-		message = ('The pressure is unpleasent! {0}'
-                    ''.format(last_pressure))
-		DB.session.add(entities.ProfileMessage(message,
-					   thermostat_profile['key'],
-					   datetime.datetime.now()))
-	    new_message = True
-	if not new_message:
-		message = 'The room atmosphere is OK'
-		DB.session.add(entities.ProfileMessage(message,
-					   thermostat_profile['key'],
-					   datetime.datetime.now()))
+                   ''.format(last_co))
+        DB.session.add(entities.ProfileMessage(message,
+                       thermostat_profile['key'],
+                       datetime.datetime.now()))
+        new_message = True
+    if mark_pressure < 0:
+        message = ('The pressure is unpleasent! {0}'
+                   ''.format(last_pressure))
+        DB.session.add(entities.ProfileMessage(message,
+                       thermostat_profile['key'],
+                       datetime.datetime.now()))
+    new_message = True
+    if not new_message:
+        message = 'The room atmosphere is OK'
+        DB.session.add(entities.ProfileMessage(message,
+                       thermostat_profile['key'],
+                       datetime.datetime.now()))
     DB.session.commit()
-	
-    
-    
-
