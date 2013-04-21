@@ -18,9 +18,9 @@
 
 
 <script id="sourcecode" type="text/javascript">
-      
-			
-			
+
+
+
 			$(function()
 {
 	var settings = {
@@ -30,29 +30,13 @@
 	pane.jScrollPane(settings);
 	var api = pane.data('jsp');
 	var i = 1;
-
-	// Every second add some new content...
-	setInterval(
-		function()
-		{if (i< 20){
-			api.getContentPane().append(
-				$('<p />').text('This is paragraph number ' + i++)
-			);
-			// we could call "pane.jScrollPane(settings)" again but it is
-			// more convenient to call via the API as then the original
-			// settings we passed in are automatically remembered.
-			api.reinitialise();
-			}
-		},
-		1000
-	);
+	// api.reinitialise();
 });
-		
     </script>
 
 
-	
-	
+
+
 <script>
 $(function() {
 $( "#tabs" ).tabs();
@@ -62,7 +46,7 @@ $( "#tabs" ).tabs();
 <body>
 
 <div id="header">
-	
+
 </div>
 
 <div id="container">
@@ -107,18 +91,12 @@ $( "#tabs" ).tabs();
 		<div class="content">
 			<h1>Baby monitor</h1>
 			<div class="scroll-pane">
+				{% for message in baby_messages %}
 				<div class="msg">
-					<div class="msg-time">[12:00:00]</div>
-					<div class="msg-text">S-a trezit copilu</div>
+					<div class="msg-time">{{message.date.strftime('[%a, %d %b %Y %H:%M:%S]')}}</div>
+					<div class="msg-text">{{message.value}}</div>
 				</div>
-				<div class="msg">
-					<div class="msg-time">[12:00:00]</div>
-					<div class="msg-text">S-a trezit copilu</div>
-				</div>
-				<div class="msg">
-					<div class="msg-time">[12:00:00]</div>
-					<div class="msg-text">S-a trezit copilu</div>
-				</div>
+				{% endfor %}
 			</div>
 		</div>
 		</div>
@@ -153,17 +131,20 @@ $( "#tabs" ).tabs();
 		<div class="content">
 			<h1>All</h1>
 			<div class="scroll-pane">
-			<p>Mauris eleifend est et turpis. Duis id erat. Suspendisse potenti. Aliquam vulputate, pede vel vehicula accumsan, mi neque rutrum erat, eu congue orci lorem eget lorem. Vestibulum non ante. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Fusce sodales. Quisque eu urna vel enim commodo pellentesque. Praesent eu risus hendrerit ligula tempus pretium. Curabitur lorem enim, pretium nec, feugiat nec, luctus a, lacus.</p>
-			<p>Duis cursus. Maecenas ligula eros, blandit nec, pharetra at, semper at, magna. Nullam ac lacus. Nulla facilisi. Praesent viverra justo vitae neque. Praesent blandit adipiscing velit. Suspendisse potenti. Donec mattis, pede vel pharetra blandit, magna ligula faucibus eros, id euismod lacus dolor eget odio. Nam scelerisque. Donec non libero sed nulla mattis commodo. Ut sagittis. Donec nisi lectus, feugiat porttitor, tempor ac, tempor vitae, pede. Aenean vehicula velit eu tellus interdum rutrum. Maecenas commodo. Pellentesque nec elit. Fusce in lacus. Vivamus a libero vitae lectus hendrerit hendrerit.</p>
-			<p>Duis cursus. Maecenas ligula eros, blandit nec, pharetra at, semper at, magna. Nullam ac lacus. Nulla facilisi. Praesent viverra justo vitae neque. Praesent blandit adipiscing velit. Suspendisse potenti. Donec mattis, pede vel pharetra blandit, magna ligula faucibus eros, id euismod lacus dolor eget odio. Nam scelerisque. Donec non libero sed nulla mattis commodo. Ut sagittis. Donec nisi lectus, feugiat porttitor, tempor ac, tempor vitae, pede. Aenean vehicula velit eu tellus interdum rutrum. Maecenas commodo. Pellentesque nec elit. Fusce in lacus. Vivamus a libero vitae lectus hendrerit hendrerit.</p>
+				{% for message in all_messages %}
+				<div class="msg">
+					<div class="msg-time">{{message.date.strftime('[%a, %d %b %Y %H:%M:%S]')}}</div>
+					<div class="msg-text">{{message.value}}</div>
+				</div>
+				{% endfor %}
 			</div>
 		</div>
 		</div>
 		</div>
-		
+
 		<div id="graphs">
 
-		
+
 		</div>
 	</div>
 

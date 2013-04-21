@@ -167,6 +167,7 @@ class ProfileMessage(DB.Model):
     def __init__(self, value, profile, date, ack=False):
         self.value = value
         self.date = date
+        self.profile = profile
         self.ack = ack
 
     def __repr__(self):
