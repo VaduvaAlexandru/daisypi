@@ -236,6 +236,7 @@ int main(int argc, char **argv)
 {
 	double alt,alt_anal;
 	double pr;
+	printf("inceput \n");
 	bmp085_Calibration();
 	temperature = bmp085_GetTemperature(bmp085_ReadUT());
 	pressure = bmp085_GetPressure(bmp085_ReadUP());
