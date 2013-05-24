@@ -16,7 +16,7 @@ This is a derivative work based on
 #define	RPI_SHT1x_H_
 
 // Includes
-#include </daisypi/sht11/bcm2835-1.25/src/bcm2835.h>
+#include "bcm2835-1.25/src/bcm2835.h"
 #include <unistd.h>
 #include <stdio.h>
 #include <math.h>

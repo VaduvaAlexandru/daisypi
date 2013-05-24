@@ -31,13 +31,14 @@ Note:
 */
 
 //#include <bcm2835.h>
-#include </daisypi/sht11/bcm2835-1.25/src/bcm2835.h>
+#include "bcm2835-1.25/src/bcm2835.h"
 #include <stdio.h>
 #include "RPi_SHT1x_2.h"
 
 void printTempAndHumidity(void)
 {
-	unsigned char noError = 1;  
+	unsigned char noError = 1;
+	float fDewPoint;  
 	value humi_val,temp_val;
 	
 	
@@ -52,44 +53,31 @@ void printTempAndHumidity(void)
 	
 	// Request Temperature measurement
 	noError = SHT1x_Measure_Start( SHT1xMeaT );
-	if (!noError) {
+	if (!noError) 
 		return;
-		}
 		
 	// Read Temperature measurement
 	noError = SHT1x_Get_Measure_Value( (unsigned short int*) &temp_val.i );
-	if (!noError) {
+	if (!noError)
 		return;
-		}
 
 	// Request Humidity Measurement
 	noError = SHT1x_Measure_Start( SHT1xMeaRh );
-	if (!noError) {
+	if (!noError)
 		return;
-		}
 		
 	// Read Humidity measurement
 	noError = SHT1x_Get_Measure_Value( (unsigned short int*) &humi_val.i );
-	if (!noError) {
+	if (!noError)
 		return;
-		}
 
 	// Convert intergers to float and calculate true values
 	temp_val.f = (float)temp_val.i;
 	humi_val.f = (float)humi_val.i;
 	
-	// Calculate Temperature and Humidity
+	// Calculate Temperature,  Humidity and DewPoint
 	SHT1x_Calc(&humi_val.f, &temp_val.f);
-//	printf("SHT11 temperature / humidity reader. \n");
-	//Print the Temperature to the console
-//	printf("Temperature: %0.2f C\n",temp_val.f);
-
-	//Print the Humidity to the console
-//	printf("Humidity: %0.2f \n",humi_val.f);
-	//Calculate and print the Dew Point
-	float fDewPoint;
 	SHT1x_CalcDewpoint(humi_val.f ,temp_val.f, &fDewPoint);
-//	printf("Dewpoint: %0.2f C\n",fDewPoint);
 	printf("TEMP_HUMID_DEW %0.4f %0.4f %0.4f\n",temp_val.f,humi_val.f,fDewPoint);
 
 }

@@ -30,7 +30,6 @@ Circuit detail:
 	
 	Note: Make sure you use P1-01 / 3.3V NOT the 5V pin.
 */
-
 #include <stdio.h>
 #include <stdint.h>
 #include <fcntl.h>
@@ -76,7 +75,8 @@ int bmp085_i2c_Begin()
 		exit(1);
 	
 	// Set the port options and set the address of the device
-	if (ioctl(fd, I2C_SLAVE, BMP085_I2C_ADDRESS) < 0) {					
+	if (ioctl(fd, I2C_SLAVE, BMP085_I2C_ADDRESS) < 0) 
+	{					
 		close(fd);
 		exit(1);
 	}
@@ -88,7 +88,8 @@ int bmp085_i2c_Begin()
 __s32 bmp085_i2c_Read_Int(int fd, __u8 address)
 {
 	__s32 res = i2c_smbus_read_word_data(fd, address);
-	if (res < 0) {
+	if (res < 0) 
+	{
 		close(fd);
 		exit(1);
 	}
@@ -102,7 +103,8 @@ __s32 bmp085_i2c_Read_Int(int fd, __u8 address)
 //Write a byte to the BMP085
 void bmp085_i2c_Write_Byte(int fd, __u8 address, __u8 value)
 {
-	if (i2c_smbus_write_byte_data(fd, address, value) < 0) {
+	if (i2c_smbus_write_byte_data(fd, address, value) < 0) 
+	{
 		close(fd);
 		exit(1);
 	}
@@ -111,7 +113,8 @@ void bmp085_i2c_Write_Byte(int fd, __u8 address, __u8 value)
 // Read a block of data BMP085
 void bmp085_i2c_Read_Block(int fd, __u8 address, __u8 length, __u8 *values)
 {
-	if(i2c_smbus_read_i2c_block_data(fd, address,length,values)<0) {
+	if(i2c_smbus_read_i2c_block_data(fd, address,length,values)<0) 
+	{
 		close(fd);
 		exit(1);
 	}
@@ -141,8 +144,7 @@ unsigned int bmp085_ReadUT()
 	unsigned int ut = 0;
 	int fd = bmp085_i2c_Begin();
 
-	// Write 0x2E into Register 0xF4
-	// This requests a temperature reading
+	// Write 0x2E into Register 0xF4. This requests a temperature reading
 	bmp085_i2c_Write_Byte(fd,0xF4,0x2E);
 	
 	// Wait at least 4.5ms
@@ -234,34 +236,22 @@ unsigned int bmp085_GetTemperature(unsigned int ut)
 
 int main(int argc, char **argv)
 {
-//	double alt,alt_anal;
 	unsigned int depl;
 	unsigned int vect[2][500];
-//	double pr;
 	bmp085_Calibration();
 	int x;
 //	temperature = bmp085_GetTemperature(bmp085_ReadUT());
 	pressure = bmp085_GetPressure(bmp085_ReadUP());
-	depl=(int)(pressure/100)*100-300;
-	vect[1][x]=0;
-//	pr=(double)pressure/100-0.3;
-//	alt = 44330 * (1-pow((double)(pressure/100+6)/1011.25, 0.190294957));
-//	alt_anal = 44330 * (1-pow((double)pressure/101325, 0.190294957));
-//	printf("Temperature         \t%0.4f C\n", ((double)temperature)/10);
-//	printf("Pressure            \t%0.4f hPa\n", ((double)pressure)/100);
-//	printf("Pr2\t%0.4f hPa\n", (double)pr);
-//	printf("Altitude recalib    \t%0.4f m\n", alt);
-//	printf("Altitude analitical \t%0.4f m\n", alt_anal);
-	printf("Deplasament > %d <\n",depl);
-	for (x=1;x<500;x++)
+	depl = (int)(pressure/100)*100-300;
+	vect[1][x] = 0;
+
+	printf("Deplasament > %d <\n", depl);
+	for (x = 1; x < 500; x++)
 	{
-	vect[1][x]=bmp085_GetPressure(bmp085_ReadUP())-depl;
-	pressure = vect[1][x];
-	printf("%d,\t %d, %f, %0.2f,\n",x, pressure, ((double)vect[1][x-1])/(double)(vect[1][x]),(double)abs((1-((double)vect[1][x-1])/(double)(vect[1][x]))*100));
-//	printf("P \t %d %f\n", pressure, ((double)vect[1][x-1])/(double)(vect[1][x]));
-	usleep(2000);
-//        print("\t 0.4%f \n",((double)&vect[1][x])/100);
-	
+		vect[1][x] = bmp085_GetPressure(bmp085_ReadUP())-depl;
+		pressure = vect[1][x];
+		printf("%d,\t %d, %f, %0.2f,\n",x, pressure, ((double)vect[1][x-1])/(double)(vect[1][x]),(double)abs((1-((double)vect[1][x-1])/(double)(vect[1][x]))*100));
+		usleep(2000);
 	}
 
 	return 0;
