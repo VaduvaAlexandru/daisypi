@@ -1,36 +1,3 @@
-/*
-Raspberry Pi Bosch BMP085 communication code.
-By:      John Burns (www.john.geek.nz)
-Date:    13 February 2013
-License: CC BY-SA v3.0 - http://creativecommons.org/licenses/by-sa/3.0/
-
-This is a derivative work based on:
-	BMP085 Extended Example Code
-	by: Jim Lindblom
-	SparkFun Electronics
-	date: 1/18/11
-	license: CC BY-SA v3.0 - http://creativecommons.org/licenses/by-sa/3.0/
-	Source: http://www.sparkfun.com/tutorial/Barometric/BMP085_Example_Code.pde
-
-Compile with: gcc -Wall -o testBMP085 ./smbus.c ./testBMP085.c
-
-
-Circuit detail:
-	Using a Spark Fun Barometric Pressure Sensor - BMP085 breakout board
-	link: https://www.sparkfun.com/products/9694
-	This comes with pull up resistors already on the i2c lines.
-	BMP085 pins below are as marked on the Sparkfun BMP085 Breakout board
-
-	SDA	- 	P1-03 / IC20-SDA
-	SCL	- 	P1-05 / IC20_SCL
-	XCLR	- 	Not Connected
-	EOC	-	Not Connected
-	GND	-	P1-06 / GND
-	VCC	- 	P1-01 / 3.3V
-	
-	Note: Make sure you use P1-01 / 3.3V NOT the 5V pin.
-*/
-
 #include <stdio.h>
 #include <stdint.h>
 #include <fcntl.h>
@@ -64,19 +31,27 @@ int b5;
 unsigned int temperature, pressure;
 
 
-// Open a connection to the bmp085
-// Returns a file id
+/*!
+ *******************************************************************************
+ *	bmp085_i2c_Begin
+ *******************************************************************************
+ *
+ *  \brief		<b>Opens a connection to the bmp085\n</b>
+ *
+ *  \return		int		file descriptor
+ *******************************************************************************/
 int bmp085_i2c_Begin()
 {
 	int fd;
 	char *fileName = "/dev/i2c-1";
-	
+
 	// Open port for reading and writing
 	if ((fd = open(fileName, O_RDWR)) < 0)
 		exit(1);
 	
 	// Set the port options and set the address of the device
-	if (ioctl(fd, I2C_SLAVE, BMP085_I2C_ADDRESS) < 0) {					
+	if (ioctl(fd, I2C_SLAVE, BMP085_I2C_ADDRESS) < 0) 
+	{					
 		close(fd);
 		exit(1);
 	}
@@ -84,11 +59,25 @@ int bmp085_i2c_Begin()
 	return fd;
 }
 
-// Read two words from the BMP085 and supply it as a 16 bit integer
+/*!
+ *******************************************************************************
+ *	bmp085_i2c_Read_Int
+ *******************************************************************************
+ *
+ *  \brief		<b>Read two words from the BMP085 and supply it as a\n
+ 					16 bit integer\n</b>
+ *
+ *	\param[in]	int 		file descriptor
+ *
+ *	\param[in]	__u8 		address from which to read
+ *
+ *  \return		__s32		resulting 16 bit integer
+ *******************************************************************************/
 __s32 bmp085_i2c_Read_Int(int fd, __u8 address)
 {
 	__s32 res = i2c_smbus_read_word_data(fd, address);
-	if (res < 0) {
+	if (res < 0) 
+	{
 		close(fd);
 		exit(1);
 	}
@@ -99,57 +88,110 @@ __s32 bmp085_i2c_Read_Int(int fd, __u8 address)
 	return res;
 }
 
-//Write a byte to the BMP085
+/*!
+ *******************************************************************************
+ *	bmp085_i2c_Write_Byte
+ *******************************************************************************
+ *
+ *  \brief		<b>Write a byte to the BMP085\n</b>
+ *
+ *
+ *	\param[in]	int 		file descriptor
+ *
+ *	\param[in]	__u8 		address to which you write
+ *
+ *	\param[in]	__u8 		value to write
+ *
+ *  \return		__s32		resulting 16 bit integer
+ *******************************************************************************/
 void bmp085_i2c_Write_Byte(int fd, __u8 address, __u8 value)
 {
-	if (i2c_smbus_write_byte_data(fd, address, value) < 0) {
+	if (i2c_smbus_write_byte_data(fd, address, value) < 0) 
+	{
 		close(fd);
 		exit(1);
 	}
 }
 
-// Read a block of data BMP085
+/*!
+ *******************************************************************************
+ *	bmp085_i2c_Read_Block
+ *******************************************************************************
+ *
+ *  \brief		<b>Read a block of data BMP085\n</b>
+ *
+ *
+ *	\param[in]	int 		file descriptor
+ *
+ *	\param[in]	__u8 		address to which you write
+ *
+ *	\param[in]	__u8 		lenght of value
+ *
+ *	\param[in]	__u8* 		value to write
+ *
+ *  \return		__s32		resulting 16 bit integer
+ *******************************************************************************/
 void bmp085_i2c_Read_Block(int fd, __u8 address, __u8 length, __u8 *values)
 {
-	if(i2c_smbus_read_i2c_block_data(fd, address,length,values)<0) {
+	if(i2c_smbus_read_i2c_block_data(fd, address, length, values)<0) 
+	{
 		close(fd);
 		exit(1);
 	}
 }
 
 
+/*!
+ *******************************************************************************
+ *	bmp085_Calibration
+ *******************************************************************************
+ *
+ *  \brief		<b>Calibrate the bmp085\n</b>
+ *******************************************************************************/
 void bmp085_Calibration()
 {
 	int fd = bmp085_i2c_Begin();
-	ac1 = bmp085_i2c_Read_Int(fd,0xAA);
-	ac2 = bmp085_i2c_Read_Int(fd,0xAC);
-	ac3 = bmp085_i2c_Read_Int(fd,0xAE);
-	ac4 = bmp085_i2c_Read_Int(fd,0xB0);
-	ac5 = bmp085_i2c_Read_Int(fd,0xB2);
-	ac6 = bmp085_i2c_Read_Int(fd,0xB4);
-	b1 = bmp085_i2c_Read_Int(fd,0xB6);
-	b2 = bmp085_i2c_Read_Int(fd,0xB8);
-	mb = bmp085_i2c_Read_Int(fd,0xBA);
-	mc = bmp085_i2c_Read_Int(fd,0xBC);
-	md = bmp085_i2c_Read_Int(fd,0xBE);
+	
+	ac1 = bmp085_i2c_Read_Int(fd, 0xAA);
+	ac2 = bmp085_i2c_Read_Int(fd, 0xAC);
+	ac3 = bmp085_i2c_Read_Int(fd, 0xAE);
+	ac4 = bmp085_i2c_Read_Int(fd, 0xB0);
+	ac5 = bmp085_i2c_Read_Int(fd, 0xB2);
+	ac6 = bmp085_i2c_Read_Int(fd, 0xB4);
+	
+	b1 = bmp085_i2c_Read_Int(fd, 0xB6);
+	b2 = bmp085_i2c_Read_Int(fd, 0xB8);
+	
+	mb = bmp085_i2c_Read_Int(fd, 0xBA);
+	mc = bmp085_i2c_Read_Int(fd, 0xBC);
+	md = bmp085_i2c_Read_Int(fd, 0xBE);
+	
 	close(fd);
 }
 
-// Read the uncompensated temperature value
+/*!
+ *******************************************************************************
+ *	bmp085_ReadUT
+ *******************************************************************************
+ *
+ *  \brief		<b>Read the uncompensated temperature value\n</b>
+ *
+ *  \return		unsigned int		temperature value
+ *******************************************************************************/
 unsigned int bmp085_ReadUT()
 {
 	unsigned int ut = 0;
+	
 	int fd = bmp085_i2c_Begin();
 
-	// Write 0x2E into Register 0xF4
-	// This requests a temperature reading
-	bmp085_i2c_Write_Byte(fd,0xF4,0x2E);
+	// Write 0x2E into Register 0xF4.  This requests a temperature reading
+	bmp085_i2c_Write_Byte(fd, 0xF4, 0x2E);
 	
 	// Wait at least 4.5ms
 	usleep(5000);
 
 	// Read the two byte result from address 0xF6
-	ut = bmp085_i2c_Read_Int(fd,0xF6);
+	ut = bmp085_i2c_Read_Int(fd, 0xF6);
 
 	// Close the i2c file
 	close (fd);
@@ -157,7 +199,15 @@ unsigned int bmp085_ReadUT()
 	return ut;
 }
 
-// Read the uncompensated pressure value
+/*!
+ *******************************************************************************
+ *	bmp085_ReadUP
+ *******************************************************************************
+ *
+ *  \brief		<b>Read the uncompensated pressure value\n</b>
+ *
+ *  \return		unsigned int		pressure value
+ *******************************************************************************/
 unsigned int bmp085_ReadUP()
 {
 	unsigned int up = 0;
@@ -165,7 +215,7 @@ unsigned int bmp085_ReadUP()
 
 	// Write 0x34+(BMP085_OVERSAMPLING_SETTING<<6) into register 0xF4
 	// Request a pressure reading w/ oversampling setting
-	bmp085_i2c_Write_Byte(fd,0xF4,0x34 + (BMP085_OVERSAMPLING_SETTING<<6));
+	bmp085_i2c_Write_Byte(fd, 0xF4, 0x34 + (BMP085_OVERSAMPLING_SETTING<<6));
 
 	// Wait for conversion, delay time dependent on oversampling setting
 	usleep((2 + (3<<BMP085_OVERSAMPLING_SETTING)) * 1000);
@@ -175,7 +225,8 @@ unsigned int bmp085_ReadUP()
 	__u8 values[3];
 	bmp085_i2c_Read_Block(fd, 0xF6, 3, values);
 
-	up = (((unsigned int) values[0] << 16) | ((unsigned int) values[1] << 8) | (unsigned int) values[2]) >> (8-BMP085_OVERSAMPLING_SETTING);
+	up = (((unsigned int) values[0] << 16) | ((unsigned int) values[1] << 8) | (unsigned int) values[2]) 
+			>> (8-BMP085_OVERSAMPLING_SETTING);
 
 	// Close the i2c file
 	close (fd);
@@ -183,8 +234,17 @@ unsigned int bmp085_ReadUP()
 	return up;
 }
 
-// Calculate pressure given uncalibrated pressure
-// Value returned will be in units of Pa
+/*!
+ *******************************************************************************
+ *	bmp085_GetPressure
+ *******************************************************************************
+ *
+ *  \brief		<b>Calculate pressure given uncalibrated pressure\n</b>
+ *
+ *	\param[in]	unsigned int 		uncalibrated pressure value
+ *
+ *  \return		unsigned int		pressure value (Pa)
+ *******************************************************************************/
 unsigned int bmp085_GetPressure(unsigned int up)
 {
 	int x1, x2, x3, b3, b6, p;
@@ -217,8 +277,17 @@ unsigned int bmp085_GetPressure(unsigned int up)
 	return p;
 }
 
-// Calculate temperature given uncalibrated temperature
-// Value returned will be in units of 0.1 deg C
+/*!
+ *******************************************************************************
+ *	bmp085_GetTemperature
+ *******************************************************************************
+ *
+ *  \brief		<b>Calculate temperature given uncalibrated temperature\n</b>
+ *
+ *	\param[in]	unsigned int 		uncalibrated temperature value
+ *
+ *  \return		unsigned int		temperature value (units of 0.1 deg C)
+ *******************************************************************************/
 unsigned int bmp085_GetTemperature(unsigned int ut)
 {
 	int x1, x2;
@@ -232,21 +301,22 @@ unsigned int bmp085_GetTemperature(unsigned int ut)
 	return result;
 }
 
+
 int main(int argc, char **argv)
 {
-	double alt,alt_anal;
+	double alt, alt_analog;
 	double pr;
+
 	bmp085_Calibration();
-	temperature = bmp085_GetTemperature(bmp085_ReadUT());
-	pressure = bmp085_GetPressure(bmp085_ReadUP());
+	temperature = bmp085_GetTemperature( bmp085_ReadUT() );
+	pressure 	= bmp085_GetPressure( bmp085_ReadUP() );
+
 	pr=(double)pressure/100-0.3;
 	alt = 44330 * (1-pow((double)(pressure/100+6)/1011.25, 0.190294957));
-	alt_anal = 44330 * (1-pow((double)pressure/101325, 0.190294957));
-//	printf("Temperature         \t%0.4f C\n", ((double)temperature)/10);
-//	printf("Pressure            \t%0.4f hPa\n", ((double)pressure)/100);
-//	printf("Pr2\t%0.4f hPa\n", (double)pr);
-//	printf("Altitude recalib    \t%0.4f m\n", alt);
-//	printf("Altitude analitical \t%0.4f m\n", alt_anal);
-	printf("TEMP_PRESS_ALTC_ALTA %0.4f %0.4f %0.4f %0.4f \n",((double)temperature)/10,((double)pressure)/100,alt,alt_anal);
+	alt_analog = 44330 * (1-pow((double)pressure/101325, 0.190294957));
+
+	printf("TEMP_PRESS_ALTC_ALTA %0.4f %0.4f %0.4f %0.4f \n",((double)temperature)/10,
+			((double)pressure)/100, alt, alt_analog);
+	
 	return 0;
 }

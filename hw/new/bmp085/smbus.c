@@ -1,44 +1,21 @@
-/*
-    smbus.c - SMBus level access helper functions
-
-    Copyright (C) 1995-97 Simon G. Vogl
-    Copyright (C) 1998-99 Frodo Looijaard <frodol@dds.nl>
-    Copyright (C) 2012    Jean Delvare <khali@linux-fr.org>
-
-    This program is free software; you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation; either version 2 of the License, or
-    (at your option) any later version.
-
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
-
-    You should have received a copy of the GNU General Public License
-    along with this program; if not, write to the Free Software
-    Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
-    MA 02110-1301 USA.
-*/
-
 #include <errno.h>
-#include "smbus.h"	// NB: Path changed!
 #include <sys/ioctl.h>
 #include <linux/types.h>
 #include <linux/i2c.h>
 #include <linux/i2c-dev.h>
+#include "smbus.h"	// NB: Path changed!
 
 //NB: Added by John Burns
 #ifndef NULL
-#define NULL 0
+	#define NULL 0
 #endif
 
 /* Compatibility defines */
 #ifndef I2C_SMBUS_I2C_BLOCK_BROKEN
-#define I2C_SMBUS_I2C_BLOCK_BROKEN I2C_SMBUS_I2C_BLOCK_DATA
+	#define I2C_SMBUS_I2C_BLOCK_BROKEN I2C_SMBUS_I2C_BLOCK_DATA
 #endif
 #ifndef I2C_FUNC_SMBUS_PEC
-#define I2C_FUNC_SMBUS_PEC I2C_FUNC_SMBUS_HWPEC_CALC
+	#define I2C_FUNC_SMBUS_PEC I2C_FUNC_SMBUS_HWPEC_CALC
 #endif
 
 __s32 i2c_smbus_access(int file, char read_write, __u8 command,
@@ -55,6 +32,7 @@ __s32 i2c_smbus_access(int file, char read_write, __u8 command,
 	err = ioctl(file, I2C_SMBUS, &args);
 	if (err == -1)
 		err = -errno;
+
 	return err;
 }
 
@@ -99,6 +77,7 @@ __s32 i2c_smbus_write_byte_data(int file, __u8 command, __u8 value)
 {
 	union i2c_smbus_data data;
 	data.byte = value;
+
 	return i2c_smbus_access(file, I2C_SMBUS_WRITE, command,
 				I2C_SMBUS_BYTE_DATA, &data);
 }
@@ -120,6 +99,7 @@ __s32 i2c_smbus_write_word_data(int file, __u8 command, __u16 value)
 {
 	union i2c_smbus_data data;
 	data.word = value;
+
 	return i2c_smbus_access(file, I2C_SMBUS_WRITE, command,
 				I2C_SMBUS_WORD_DATA, &data);
 }
@@ -127,6 +107,7 @@ __s32 i2c_smbus_write_word_data(int file, __u8 command, __u16 value)
 __s32 i2c_smbus_process_call(int file, __u8 command, __u16 value)
 {
 	union i2c_smbus_data data;
+	
 	data.word = value;
 	if (i2c_smbus_access(file, I2C_SMBUS_WRITE, command,
 			     I2C_SMBUS_PROC_CALL, &data))
@@ -148,6 +129,7 @@ __s32 i2c_smbus_read_block_data(int file, __u8 command, __u8 *values)
 
 	for (i = 1; i <= data.block[0]; i++)
 		values[i-1] = data.block[i];
+	
 	return data.block[0];
 }
 
@@ -156,11 +138,13 @@ __s32 i2c_smbus_write_block_data(int file, __u8 command, __u8 length,
 {
 	union i2c_smbus_data data;
 	int i;
+	
 	if (length > I2C_SMBUS_BLOCK_MAX)
 		length = I2C_SMBUS_BLOCK_MAX;
 	for (i = 1; i <= length; i++)
 		data.block[i] = values[i-1];
 	data.block[0] = length;
+	
 	return i2c_smbus_access(file, I2C_SMBUS_WRITE, command,
 				I2C_SMBUS_BLOCK_DATA, &data);
 }
@@ -187,6 +171,7 @@ __s32 i2c_smbus_read_i2c_block_data(int file, __u8 command, __u8 length,
 
 	for (i = 1; i <= data.block[0]; i++)
 		values[i-1] = data.block[i];
+	
 	return data.block[0];
 }
 
@@ -195,11 +180,13 @@ __s32 i2c_smbus_write_i2c_block_data(int file, __u8 command, __u8 length,
 {
 	union i2c_smbus_data data;
 	int i;
+	
 	if (length > I2C_SMBUS_BLOCK_MAX)
 		length = I2C_SMBUS_BLOCK_MAX;
 	for (i = 1; i <= length; i++)
 		data.block[i] = values[i-1];
 	data.block[0] = length;
+	
 	return i2c_smbus_access(file, I2C_SMBUS_WRITE, command,
 				I2C_SMBUS_I2C_BLOCK_BROKEN, &data);
 }
@@ -224,5 +211,6 @@ __s32 i2c_smbus_block_process_call(int file, __u8 command, __u8 length,
 
 	for (i = 1; i <= data.block[0]; i++)
 		values[i-1] = data.block[i];
+	
 	return data.block[0];
 }
